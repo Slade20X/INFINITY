@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Haven.IT — Panel Administratora</title>
+  <link rel="icon" href="logo2.png" type="image/png">
+  <meta name="color-scheme" content="dark" />
+  <style>
+    /* --- Reset & base --- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: #0f0f0f; color: #ffca0e; line-height: 1.5; }
+    img, svg, video { max-width: 100%; display: block; }
+
+    :root {
+      --bg: #000;
+      --bg-soft: #0f0f0f;
+      --text: #ffca0e;
+      --muted: rgba(255,255,255,.75);
+      --border: rgba(255,255,255,.12);
+      --border-strong: rgba(255,255,255,.22);
+      --ring: rgba(255,255,255,.25);
+      --shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 10px 40px rgba(78,75,75,.6);
+      --radius: 16px;
+      --container: 1200px;
+      --ok: #20c997;
+      --warn: #ffc107;
+      --err: #ef4444;
+    }
+
+    .container { max-width: var(--container); margin-inline: auto; padding-inline: 16px; }
+    .hidden { display: none !important; }
+    .btn { border: 1px solid var(--text); color: var(--bg); background: var(--text); padding: 10px 16px; border-radius: 20px; font-weight: 600; letter-spacing: .2px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: transform .18s ease, background .18s ease, color .18s ease; cursor: pointer; }
+    .btn-outline { background: transparent; color: var(--text); border-color: var(--border-strong); }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-ghost { border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; border-radius: 12px; padding: 8px 12px; }
+    .btn-danger { background: #ef4444; border-color: #ef4444; color: #fff; }
+
+    /* --- Header --- */
+    .header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); backdrop-filter: blur(6px); background: #0f0f0f; }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 700; letter-spacing: .4px; }
+    .nav-actions { display:flex; align-items:center; gap:10px; }
+
+    /* --- Layout --- */
+    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 64px); }
+    .sidebar { border-right: 1px solid var(--border); padding: 16px; position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto; background: #0f0f0f; }
+    .side-title { color: var(--muted); font-size: 12px; letter-spacing: .6px; text-transform: uppercase; margin: 8px 0 10px; }
+    .side-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+    .side-link { display:flex; align-items:center; gap:10px; color: var(--muted); text-decoration:none; border:1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+    .side-link:hover, .side-link.active { color: var(--text); border-color: var(--text); }
+
+    .main { padding: 20px; }
+    .breadcrumbs { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+    .h1 { font-size: clamp(24px, 3.6vw, 36px); line-height: 1.15; margin: 0 0 8px; }
+
+    /* --- Widgets --- */
+    .grid { display: grid; gap: 16px; }
+    .cards { grid-template-columns: repeat(4, minmax(0,1fr)); }
+    .card { border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; background: var(--bg-soft); box-shadow: var(--shadow); }
+    .card:hover { border-color: var(--text); }
+    .card .label { color: var(--muted); font-size: 12px; letter-spacing:.3px; }
+    .card .value { font-size: 28px; font-weight: 700; margin-top: 6px; color: #fff; }
+    .delta { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); display:inline-block; }
+    .delta.up { color: var(--ok); border-color: rgba(32,201,151,.35); }
+    .delta.down { color: var(--err); border-color: rgba(239,68,68,.35); }
+
+    .panel { border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-soft); padding: 16px; box-shadow: var(--shadow); }
+    .panel h3 { margin: 0 0 10px; }
+
+    .sparkline { width: 100%; height: 80px; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); color: #fff; }
+    th { color: var(--muted); font-weight: 600; font-size: 13px; }
+    .status { padding: 4px 8px; border-radius: 999px; border:1px solid var(--border); font-size: 12px; display:inline-block; }
+    .st-ok { color: var(--ok); border-color: rgba(32,201,151,.35); }
+    .st-warn { color: var(--warn); border-color: rgba(255,193,7,.35); }
+    .st-err { color: var(--err); border-color: rgba(239,68,68,.35); }
+
+    .progress { height: 10px; background: #1c1c1c; border:1px solid var(--border); border-radius: 999px; overflow:hidden; }
+    .progress > span { display:block; height:100%; background: var(--text); }
+
+    .kanban { display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .kan-col { border:1px solid var(--border); border-radius: 12px; padding: 10px; }
+    .kan-col h4 { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+    .task { border:1px solid var(--border); border-radius: 10px; padding: 8px; margin-bottom: 8px; background:#0b0b0b; color:#fff; cursor: grab; }
+
+    .footer { border-top: 1px solid var(--border); text-align: center; color: rgba(255,255,255,.6); padding: 20px 0; font-size: 14px; }
+
+    @media (max-width: 1100px) { .cards { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 880px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    }
+
+    /* --- Login screen overlay --- */
+    .login-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.9); display: grid; place-items: center; z-index: 1000; }
+    .login-card { width: min(460px, 92vw); border: 1px solid var(--border); border-radius: 20px; padding: 20px; background: #0f0f0f; box-shadow: var(--shadow); }
+    .login-card h2 { margin: 0 0 6px; }
+    .login-grid { display:grid; gap:12px; }
+    .login-card label { color: var(--muted); font-size: 14px; }
+    .login-card input, .login-card select { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: #fff; outline: none; }
+    .login-help { color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" role="banner">
+    <div class="container nav">
+      <a class="brand" href="#" aria-label="Strona główna">
+        <img src="HAVEN.IT.png" alt="Logo firmy" width="220" height="auto">
+      </a>
+      <div class="nav-actions">
+        <span id="currentRole" class="btn-ghost" aria-live="polite">Rola: —</span>
+        <button class="btn-outline btn" id="logoutBtn">Wyloguj</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Layout Admin -->
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div>
+        <div class="side-title">Nawigacja</div>
+        <ul class="side-list">
+          <li><a class="side-link active" href="#dashboard">📊 Dashboard</a></li>
+          <li data-feature="users:view"><a class="side-link" href="#uzytkownicy">👤 Użytkownicy</a></li>
+          <li data-feature="orders:view"><a class="side-link" href="#zamowienia">🧾 Zamówienia</a></li>
+          <li data-feature="tickets:view"><a class="side-link" href="#wsparcie">💬 Zgłoszenia</a></li>
+          <li data-feature="products:view"><a class="side-link" href="#produkty">🎮 Produkty</a></li>
+          <li data-feature="reports:view"><a class="side-link" href="#raporty">📑 Raporty</a></li>
+          <li data-feature="settings:access"><a class="side-link" href="#ustawienia">⚙️ Ustawienia</a></li>
+        </ul>
+      </div>
+      <div style="margin-top:16px">
+        <div class="side-title">Szybkie akcje</div>
+        <ul class="side-list">
+          <li data-feature="products:add"><button class="side-link" id="addProduct">➕ Dodaj produkt</button></li>
+          <li data-feature="tickets:create"><button class="side-link" id="newTicket">📨 Nowe zgłoszenie</button></li>
+          <li data-feature="orders:export"><button class="side-link" id="exportCSV">⬇️ Eksport CSV</button></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="breadcrumbs">Panel / <span>Dashboard</span></div>
+      <h1 class="h1">Centrum dowodzenia</h1>
+
+      <!-- Karty KPI -->
+      <section class="grid cards" aria-label="Kluczowe wskaźniki">
+        <article class="card"><div class="label">Aktywni użytkownicy (24h)</div><div class="value" id="kpiUsers">1 248</div><span class="delta up" id="kpiUsersDelta">▲ 4.2%</span></article>
+        <article class="card"><div class="label">Sprzedaż dziś</div><div class="value" id="kpiSales">12 540 zł</div><span class="delta up" id="kpiSalesDelta">▲ 8.1%</span></article>
+        <article class="card"><div class="label">Otwarte zgłoszenia</div><div class="value" id="kpiTickets">23</div><span class="delta down" id="kpiTicketsDelta">▼ 2</span></article>
+        <article class="card"><div class="label">Uptime serwera</div><div class="value" id="kpiUptime">99.96%</div><span class="delta up" id="kpiUptimeDelta">+0.01%</span></article>
+      </section>
+
+      <div class="grid" style="grid-template-columns: 1.1fr .9fr; margin-top: 16px;">
+        <!-- Wykres sprzedaży -->
+        <section class="panel" aria-label="Sprzedaż — ostatnie 7 dni">
+          <h3>Sprzedaż — ostatnie 7 dni</h3>
+          <svg class="sparkline" viewBox="0 0 100 30" preserveAspectRatio="none" id="salesSpark"></svg>
+          <div style="color:var(--muted); font-size:12px">Dzienne przychody</div>
+        </section>
+        <!-- Status serwerów -->
+        <section class="panel" aria-label="Status serwera">
+          <h3>Status serwera</h3>
+          <div style="display:grid; gap:10px">
+            <div><div class="label">CPU</div><div class="progress" aria-label="Użycie CPU"><span id="cpuBar" style="width:48%"></span></div></div>
+            <div><div class="label">Pamięć RAM</div><div class="progress" aria-label="Użycie RAM"><span id="ramBar" style="width:62%"></span></div></div>
+            <div><div class="label">Dysk</div><div class="progress" aria-label="Użycie Dysku"><span id="diskBar" style="width:71%"></span></div></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid" style="grid-template-columns: 1fr .9fr; margin-top: 16px;">
+        <!-- Zamówienia -->
+        <section class="panel" id="zamowienia" data-feature="orders:view">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+            <h3 style="margin:0">Ostatnie zamówienia</h3>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input id="ordersSearch" type="text" placeholder="Szukaj…" style="padding:8px 10px; border-radius:10px; border:1px solid var(--border); background:#0b0b0b; color:#fff;">
+              <button class="btn-ghost" id="sortOrders">Sortuj ▼</button>
+            </div>
+          </div>
+          <div style="overflow:auto; margin-top:8px">
+            <table id="ordersTable" aria-describedby="ostatnie zamówienia">
+              <thead><tr><th>#</th><th>Klient</th><th>Data</th><th>Kwota</th><th>Status</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Kanban + aktywność -->
+        <section class="panel" id="wsparcie" data-feature="tickets:view">
+          <h3>Zadania zespołu</h3>
+          <div class="kanban" aria-label="Zadania">
+            <div class="kan-col" aria-label="Do zrobienia">
+              <h4>Do zrobienia</h4>
+              <div class="task" draggable="true">Zweryfikować nowe produkty</div>
+              <div class="task" draggable="true">Odpisać na 5 zgłoszeń</div>
+            </div>
+            <div class="kan-col" aria-label="W toku">
+              <h4>W toku</h4>
+              <div class="task" draggable="true">Aktualizacja polityki zwrotów</div>
+            </div>
+            <div class="kan-col" aria-label="Zrobione">
+              <h4>Zrobione</h4>
+              <div class="task" draggable="true">Integracja płatności</div>
+            </div>
+          </div>
+          <h3 style="margin-top:16px">Aktywność</h3>
+          <ul id="activity" style="list-style:none; padding:0; margin:0; display:grid; gap:8px">
+            <li>🕒 12:10 — Utworzono zamówienie #1046</li>
+            <li>🕒 11:55 — Zmieniono status zgłoszenia #553 → Oczekuje</li>
+            <li>🕒 10:22 — Dodano produkt „Haven Headset Pro”</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- Produkty -->
+      <section class="panel" id="produkty" data-feature="products:view" style="margin-top:16px">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+          <h3 style="margin:0">Produkty — stany magazynowe</h3>
+          <button class="btn" id="addProductTop" data-feature="products:add">Dodaj produkt</button>
+        </div>
+        <div class="grid" style="grid-template-columns: repeat(4, minmax(0,1fr)); margin-top:10px">
+          <article class="card"><div class="label">Haven Keyboard V2</div><div class="value">124 szt.</div></article>
+          <article class="card"><div class="label">Haven Mouse X</div><div class="value">62 szt.</div></article>
+          <article class="card"><div class="label">Haven Headset Pro</div><div class="value">31 szt.</div></article>
+          <article class="card"><div class="label">Haven Pad XXL</div><div class="value">0 szt. <span class="status st-err">brak</span></div></article>
+        </div>
+      </section>
+
+
+<!-- admin.html -->
+<h1>Lista zamówień</h1>
+<table border="1" id="tabelaZamowien">
+  <tr>
+    <th>Data</th>
+    <th>Imię i nazwisko</th>
+    <th>Email</th>
+    <th>Adres</th>
+    <th>Telefon</th>
+    <th>Produkt</th>
+  </tr>
+</table>
+
+<script>
+const tabela = document.getElementById('tabelaZamowien');
+let zamowienia = JSON.parse(localStorage.getItem('zamowienia')) || [];
+
+zamowienia.forEach(z => {
+    const wiersz = tabela.insertRow();
+    wiersz.insertCell(0).innerText = z.data;
+    wiersz.insertCell(1).innerText = z.imie;
+    wiersz.insertCell(2).innerText = z.email;
+    wiersz.insertCell(3).innerText = z.adres;
+    wiersz.insertCell(4).innerText = z.telefon;
+    wiersz.insertCell(5).innerText = z.produkt;
+});
+</script>
+
+
+      <!-- Raporty -->
+      <section class="panel" id="raporty" data-feature="reports:view" style="margin-top:16px">
+        <h3>Raporty</h3>
+        <p class="label"> tutaj będą generowane PDF/CSV.</p>
+        <button class="btn" id="generateReport" data-feature="reports:generate">Generuj raport (CSV)</button>
+      </section>
+
+      <!-- Ustawienia / RBAC -->
+      <section class="panel" id="ustawienia" data-feature="settings:access" style="margin-top:16px">
+        <h3>Zarządzanie uprawnieniami (RBAC)</h3>
+        <p class="label">Zaznacz, które role mają dostęp do poszczególnych funkcji. Zmiany zapisują się w przeglądarce (localStorage).</p>
+        <div id="rbacTableWrap" style="overflow:auto; margin-top:8px"></div>
+        <div style="display:flex; gap:8px; margin-top:12px">
+          <button class="btn" id="saveRBAC">Zapisz</button>
+          <button class="btn-ghost" id="resetRBAC">Przywróć domyślne</button>
+        </div>
+      </section>
+
+      <footer class="footer" style="margin-top:16px">© <span id="year"></span> HAVEN<span style="color:#ffca0e">.IT</span> — Panel Administratora</footer>
+    </main>
+  </div>
+
+  <!-- Login overlay -->
+  <div class="login-overlay" id="loginOverlay" role="dialog" aria-modal="true">
+    <div class="login-card">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px">
+        <img src="HAVEN.IT.png" alt="Logo firmy" width="120" height="auto">
+        <div>
+          <h2>Logowanie</h2>
+          <div class="login-help">Wersja demo</div>
+        </div>
+      </div>
+      <div class="login-grid">
+        <label>
+          Rola
+          <select id="loginRole">
+            <option value="Admin">Admin</option>
+            <option value="Moderator">Moderator</option>
+            <option value="Support">Support</option>
+          </select>
+        </label>
+        <label>
+          Login
+          <input id="loginUser" type="text" placeholder="np. admin" autocomplete="username" />
+        </label>
+        <label>
+          Hasło
+          <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" />
+        </label>
+        <div class="login-help">Domyślne hasła: <code>admin123</code> / <code>mod123</code> / <code>support123</code></div>
+        <button class="btn" id="loginBtn">Zaloguj</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+/* ===== Utils: storage ===== */
+const LS_KEYS = {
+  SESSION: 'haven.session',
+  RBAC: 'haven.rbac.permissions'
+};
+
+const DEFAULT_RBAC = {
+  roles: ['Admin','Moderator','Support'],
+  permissions: {
+    'users:view': ['Admin'],
+    'orders:view': ['Admin','Moderator','Support'],
+    'orders:export': ['Admin','Moderator'],
+    'tickets:view': ['Admin','Support'],
+    'tickets:create': ['Admin','Support'],
+    'products:view': ['Admin','Moderator'],
+    'products:add': ['Admin','Moderator'],
+    'reports:view': ['Admin','Moderator'],
+    'reports:generate': ['Admin','Moderator'],
+    'settings:access': ['Admin']
+  }
+};
+
+function loadRBAC(){
+  const raw = localStorage.getItem(LS_KEYS.RBAC);
+  if(!raw) return structuredClone(DEFAULT_RBAC);
+  try { 
+    const data = JSON.parse(raw); 
+    return { ...DEFAULT_RBAC, ...data, permissions: { ...DEFAULT_RBAC.permissions, ...(data.permissions||{}) } }; 
+  } catch { 
+    return structuredClone(DEFAULT_RBAC); 
+  }
+}
+function saveRBAC(data){ localStorage.setItem(LS_KEYS.RBAC, JSON.stringify(data)); }
+
+function loadSession(){
+  try { return JSON.parse(localStorage.getItem(LS_KEYS.SESSION)) || null; } catch { return null; }
+}
+function saveSession(sess){ localStorage.setItem(LS_KEYS.SESSION, JSON.stringify(sess)); }
+function clearSession(){ localStorage.removeItem(LS_KEYS.SESSION); }
+
+/* ===== Login logic ===== */
+const PASSWORDS = {
+  Admin: "admin123",
+  Moderator: "mod123",
+  Support: "support123"
+};
+
+document.getElementById("loginBtn").addEventListener("click", function() {
+  const role = document.getElementById("loginRole").value;
+  const user = document.getElementById("loginUser").value;
+  const pass = document.getElementById("loginPass").value;
+
+  if (PASSWORDS[role] && PASSWORDS[role] === pass) {
+    saveSession({ role, user });
+    document.getElementById("loginOverlay").style.display = "none";
+    document.getElementById("currentRole").textContent = "Rola: " + role;
+    applyRBAC();
+    if (role === "Admin") renderRBACEditor();
+  } else {
+    alert("❌ Nieprawidłowy login lub hasło!");
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", function() {
+  clearSession();
+  location.reload();
+});
+
+/* ===== RBAC check & apply ===== */
+function can(role, feature){
+  const rbac = loadRBAC();
+  const allowed = rbac.permissions[feature] || [];
+  return allowed.includes(role);
+}
+
+function applyRBAC(){
+  const sess = loadSession();
+  const role = sess?.role;
+  document.querySelectorAll('[data-feature]').forEach(el=>{
+    const feature = el.getAttribute('data-feature');
+    const allowed = role && can(role, feature);
+    el.classList.toggle('hidden', !allowed);
+  });
+}
+
+/* ===== RBAC Settings UI ===== */
+function renderRBACEditor(){
+  const wrap = document.getElementById('rbacTableWrap');
+  const rbac = loadRBAC();
+  const features = Object.keys(rbac.permissions).sort();
+  const roles = rbac.roles;
+  let html = '<table><thead><tr><th>Funkcja</th>' + roles.map(r=>`<th>${r}</th>`).join('') + '</tr></thead><tbody>';
+  for(const f of features){
+    html += '<tr><td style="color:var(--muted)">' + f + '</td>';
+    for(const r of roles){
+      const checked = rbac.permissions[f]?.includes(r) ? 'checked' : '';
+      html += `<td><input type="checkbox" data-rbac="${f}:${r}" ${checked}></td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+}
+
+document.getElementById('saveRBAC').addEventListener('click', ()=>{
+  const rbac = loadRBAC();
+  document.querySelectorAll('input[type="checkbox"][data-rbac]').forEach(chk=>{
+    const [feat, role] = chk.getAttribute('data-rbac').split(':');
+    const list = new Set(rbac.permissions[feat] || []);
+    if(chk.checked) list.add(role); else list.delete(role);
+    rbac.permissions[feat] = Array.from(list);
+  });
+  saveRBAC(rbac);
+  alert('Uprawnienia zapisane.');
+  applyRBAC();
+});
+
+document.getElementById('resetRBAC').addEventListener('click', ()=>{
+  saveRBAC(DEFAULT_RBAC);
+  renderRBACEditor();
+  applyRBAC();
+  alert('Przywrócono domyślne uprawnienia.');
+});
+
+/* ===== Demo content ===== */
+// Sparkline
+function drawSpark(el, points) {
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const norm = p => (p - min) / ((max - min) || 1);
+  const stepX = 100 / (points.length - 1);
+  const d = points.map((p,i) => `${i===0 ? 'M' : 'L'} ${i*stepX} ${30 - norm(p)*28 - 1}`).join(' ');
+  el.innerHTML = `<path d="${d}" fill="none" stroke="${getComputedStyle(document.documentElement).getPropertyValue('--text').trim()}" stroke-width="1.8"/>`;
+}
+const salesEl = document.getElementById('salesSpark');
+let salesData = [12, 15, 11, 18, 22, 17, 25];
+drawSpark(salesEl, salesData);
+setInterval(() => {
+  salesData = salesData.slice(1).concat( Math.max(5, Math.round(salesData.at(-1) + (Math.random()*6-3))) );
+  drawSpark(salesEl, salesData);
+}, 4000);
+
+// Resource bars wobble
+function wobble(el){ const base = parseFloat(el.style.width); const next = Math.min(95, Math.max(5, base + (Math.random()*8-4))); el.style.width = next.toFixed(0) + '%'; }
+setInterval(()=>{ ['cpuBar','ramBar','diskBar'].forEach(id=>wobble(document.getElementById(id))); }, 5000);
+
+// Orders
+const orders = [
+  { id: 1051, client: 'A. Kowalski', date: '2025-08-18 12:05', total: 459.00, status: 'Wysłane' },
+  { id: 1050, client: 'B. Nowak', date: '2025-08-18 11:47', total: 1299.00, status: 'W realizacji' },
+  { id: 1049, client: 'C. Zielińska', date: '2025-08-18 10:15', total: 189.00, status: 'Oczekuje' },
+  { id: 1048, client: 'D. Wiśniewski', date: '2025-08-18 09:40', total: 219.00, status: 'Anulowane' },
+  { id: 1047, client: 'E. Wójcik', date: '2025-08-17 16:22', total: 799.00, status: 'W realizacji' },
+  { id: 1046, client: 'F. Lewandowska', date: '2025-08-17 12:10', total: 149.00, status: 'Wysłane' },
+];
+function statusClass(s){ if (s === 'Wysłane') return 'st-ok'; if (s === 'W realizacji' || s === 'Oczekuje') return 'st-warn'; return 'st-err'; }
+const tbody = document.querySelector('#ordersTable tbody');
+function renderOrders(rows){ tbody.innerHTML = rows.map(o => `
+  <tr><td>#${o.id}</td><td>${o.client}</td><td>${o.date}</td><td>${o.total.toFixed(2)} zł</td><td><span class="status ${statusClass(o.status)}">${o.status}</span></td></tr>`).join(''); }
+renderOrders(orders);
+
+document.getElementById('ordersSearch').addEventListener('input', (e)=>{
+  const q = e.target.value.toLowerCase();
+  const filtered = orders.filter(o => Object.values(o).join(' ').toLowerCase().includes(q));
+  renderOrders(filtered);
+});
+let sortAsc = false; 
+document.getElementById('sortOrders').addEventListener('click', ()=>{
+  sortAsc = !sortAsc; 
+  const sorted = [...orders].sort((a,b)=> sortAsc ? a.id - b.id : b.id - a.id); 
+  renderOrders(sorted); 
+  document.getElementById('sortOrders').textContent = `Sortuj ${sortAsc ? '▲' : '▼'}`;
+});
+
+// Quick actions
+function guard(feature, fn){ 
+  return ()=>{ 
+    const sess = loadSession(); 
+    if(!sess || !can(sess.role, feature)) { alert('Brak uprawnień: ' + feature); return; } 
+    fn(); 
+  }; 
+}
+const addProduct = ()=> alert('Otwórz modal dodawania produktu (demo)');
+const newTicket = ()=> alert('Utwórz nowe zgłoszenie (demo)');
+const exportCSV = ()=>{
+  const sess = loadSession(); if(!sess || !can(sess.role, 'orders:export')) { alert('Brak uprawnień: orders:export'); return; }
+  const header = 'id,klient,data,kwota,status\n'; 
+  const rows = orders.map(o=>`${o.id},${o.client},${o.date},${o.total},${o.status}`).join('\n');
+  const blob = new Blob([header + rows], { type: 'text/csv;charset=utf-8;' }); 
+  const url = URL.createObjectURL(blob); 
+  const a = document.createElement('a'); 
+  a.href = url; 
+  a.download = 'zamowienia.csv'; 
+  a.click(); 
+  URL.revokeObjectURL(url);
+};
+['addProduct','addProductTop'].forEach(id=>{ document.getElementById(id).addEventListener('click', guard('products:add', addProduct)); });
+document.getElementById('newTicket').addEventListener('click', guard('tickets:create', newTicket));
+document.getElementById('exportCSV').addEventListener('click', exportCSV);
+
+// Drag & drop tasks
+document.querySelectorAll('.task').forEach(t=>{
+  t.addEventListener('dragstart', e=>{ e.dataTransfer.setData('text/plain', t.textContent); e.dataTransfer.effectAllowed = 'move'; t.classList.add('dragging'); });
+  t.addEventListener('dragend', ()=> t.classList.remove('dragging'));
+});
+document.querySelectorAll('.kan-col').forEach(col=>{
+  col.addEventListener('dragover', e=>{ e.preventDefault(); });
+  col.addEventListener('drop', e=>{ e.preventDefault(); const el = document.querySelector('.task.dragging'); if (el) col.appendChild(el); });
+});
+
+// Init
+document.getElementById('year').textContent = new Date().getFullYear();
+const sess = loadSession();
+if(sess){
+  document.getElementById("loginOverlay").style.display = "none";
+  document.getElementById("currentRole").textContent = "Rola: " + sess.role;
+  applyRBAC();
+  if(sess.role === "Admin") renderRBACEditor();
+}
+</script>

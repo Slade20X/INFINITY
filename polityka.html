@@ -1,0 +1,550 @@
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Polityka prywatności | INFINITY HAVEN</title>
+    <link rel="icon" href="logo2.png" type="image/png">
+  <meta name="color-scheme" content="dark" />
+  <style>
+    /* --- Reset & base --- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: #0f0f0f; color: #ffca0e; line-height: 1.5; }
+    img, svg, video { max-width: 100%; display: block; }
+
+    :root {
+      --bg: #000;
+      --text: #ffca0e;
+      --muted: rgba(255,255,255,.7);
+      --border: rgba(255,255,255,.12);
+      --border-strong: rgba(255,255,255,.2);
+      --ring: rgba(255,255,255,.3);
+      --shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 10px 40px rgba(78, 75, 75, 0.6);
+      --radius: 16px;
+      --container: 1200px;
+    }
+
+    .container { max-width: var(--container); margin-inline: auto; padding-inline: 16px; }
+    .hidden { display: none; }
+    .btn { border: 1px solid var(--text); color: var(--bg); background: var(--text); padding: 10px 16px; border-radius: 20px; font-weight: 600; letter-spacing: .2px; text-decoration: none; display: inline-block; transition: transform .18s ease, background .18s ease, color .18s ease; }
+    .btn-outline { background: transparent; color: var(--text); border-color: var(--border-strong); }
+    .btn:hover { transform: translateY(-2px); }
+
+    /* --- Header --- */
+    .header { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border); backdrop-filter: blur(6px); background: #0f0f0f; }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 700; letter-spacing: .4px; }
+    .brand-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--text); }
+    .nav-links { display: none; gap: 28px; }
+    .nav-links a { color: var(--muted); text-decoration: none; transition: color .18s ease; }
+    .nav-links a:hover { color: var(--text); }
+
+    .menu-btn { border: 1px solid rgba(255,255,255,.15); background: transparent; color: var(--text); padding: 8px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; }
+
+    /* --- Mobile menu --- */
+    .mobile { display: none; border-bottom: 1px solid var(--border); }
+    .mobile a { display: block; padding: 12px 14px; text-decoration: none; color: var(--text); border: 1px solid var(--border); border-radius: 12px; margin: 8px 0; }
+    .mobile a:hover { background: var(--text); color: var(--bg); }
+
+    /* --- Hero --- */
+    .hero { position: relative; overflow: hidden; }
+    .hero::before { content: ""; position: absolute; inset: -40% -20% auto -20%; height: 420px; background: radial-gradient(600px 280px at 50% 0%, #0f0f0f, transparent); pointer-events: none; }
+    .hero-grid { display: grid; gap: 28px; align-items: center; padding: 64px 0; }
+    .h1 { font-size: clamp(32px, 5vw, 48px); line-height: 1.1; margin: 0; }
+    .lead { color: var(--muted); max-width: 62ch; }
+    .mockup { border: 1px solid var(--border); border-radius: calc(var(--radius) + 8px); padding: 16px; box-shadow: var(--shadow); }
+    .mockup-inner { aspect-ratio: 16/10; border: 1px dashed rgba(255,255,255,.15); border-radius: var(--radius); display: grid; place-items: center; color: rgba(255,255,255,.6); }
+
+    /* --- Sections --- */
+    section { scroll-margin-top: 84px; }
+    .features { padding: 64px 0; }
+    .grid { display: grid; gap: 16px; }
+    .card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: transform .18s ease, border-color .18s ease; }
+    .card:hover { transform: translateY(-2px); border-color: var(--text); }
+    .about, .contact { padding: 64px 0; }
+    .panel { border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+
+    /* --- Form --- */
+    label { color: var(--muted); font-size: 14px; }
+    input, textarea { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; box-shadow: 0 0 0 0 var(--ring); transition: border-color .18s ease, box-shadow .18s ease; }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,.3); }
+    input:focus, textarea:focus { border-color: var(--text); box-shadow: 0 0 0 4px var(--ring); }
+
+    /* --- Footer --- */
+    .footer { border-top: 1px solid var(--border); text-align: center; color: rgba(255,255,255,.6); padding: 28px 0; font-size: 14px; }
+
+    /* --- Responsive --- */
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+      .menu-btn { display: none; }
+      .hero-grid { grid-template-columns: 1.05fr .95fr; padding: 96px 0; gap: 40px; }
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .mobile { display: none !important; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .btn { transition: none; }
+      .card { transition: none; }
+    }
+    .logo {
+    margin-right: 450px;
+    }
+    .a22 {
+    color:#ffca0e
+    }
+    .a23 {
+    color:#ffca0e;
+    font-size: 50px;
+    }    
+    .a24 {
+    color:#ffffff;
+    font-size: 50px;
+    }
+        /* --- Produkty --- */
+    .products { padding: 100px 0; }
+.grid {
+  display: flex;
+  justify-content: center; /* wyśrodkowanie w poziomie */
+}
+
+
+
+    
+    .product-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  display: grid;
+}
+
+    /* --- Zdjęcie produktu --- */
+    .product-card img {
+      margin: 0 auto 16px;   /* wyśrodkowanie i odstęp pod spodem */
+      max-height: 220px;     /* duże, ale wciąż proporcjonalne */
+      width: auto;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .product-name { margin: 12px 0 4px; font-size: 20px; color: #fff; }
+    .product-price { font-size: 18px; color: var(--text); font-weight: bold; }
+
+    /* --- Footer --- */
+    .footer { border-top: 1px solid var(--border); text-align: center; color: rgba(255,255,255,.6); padding: 28px 0; font-size: 14px; }
+
+    /* --- Responsive --- */
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+      .menu-btn { display: none; }
+      .hero-grid { grid-template-columns: 1.05fr .95fr; padding: 96px 0; gap: 40px; }
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+      .mobile { display: none !important; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .btn { transition: none; }
+      .card { transition: none; }
+    }
+    .logo {
+    margin-right: 450px;
+    }
+    .a22 {
+    color:#ffca0e
+    }
+    .a23 {
+    color:#ffca0e;
+    font-size: 50px;
+    }    
+    .a24 {
+    color:#ffffff;
+    font-size: 50px;
+    } 
+    .a50 {
+    color:#c71c1cf3;
+    font-size: 16px;
+    } 
+
+    /*CHAT BOT*/
+    /* Floating button */
+#chatBtn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  background: #ffca0e;
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 1000;
+}
+
+#chatBtn:hover {
+  transform: scale(1.1);
+  background: #ffd633;
+}
+
+/* Chat box */
+#chatBox {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 300px;
+  height: 400px;
+  background: #111;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+/* Chat header */
+.chat-header {
+  background: #ffca0e;
+  color: #000;
+  padding: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-header #closeChat {
+  cursor: pointer;
+}
+
+/* Messages */
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* Input */
+.chat-input {
+  display: flex;
+  border-top: 1px solid rgba(255,255,255,.2);
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #222;
+  color: #fff;
+  outline: none;
+}
+
+.chat-input button {
+  background: #ffca0e;
+  border: none;
+  padding: 0 16px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.products-header {
+  display: flex;
+  justify-content: center;
+  gap: 80px;        /* odstęp między przyciskami */
+
+  margin-top: 150px;
+}
+
+.products-header .btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.btn23 {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.6);  /* taki jak tekst w stopce */
+  font: inherit;                /* dziedziczy font */
+  cursor: pointer;              /* pokazuje, że można kliknąć */
+  padding: 0;
+}
+
+.btn23:hover {
+  color: #ffca0e;               /* zmiana koloru przy najechaniu */
+  text-decoration: underline;   /* opcjonalne podkreślenie */
+}
+/* Polityka prywatności – wygląd nagłówków i treści */
+.policy {
+  padding: 48px 0;
+}
+
+.policy .policy-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 64px;
+  background: #0e0e0e;
+  box-shadow: var(--shadow);
+}
+
+/* nagłówki – pogrubione */
+.policy h1,
+.policy h2,
+.policy h3 {
+  color: var(--text);       /* #ffca0e z Twojego motywu */
+  font-weight: 800;         /* wyraźne pogrubienie */
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+
+/* rozmiary nagłówków */
+.policy h1 { font-size: clamp(28px, 4.2vw, 40px); margin-bottom: 16px; }
+.policy h2 { font-size: clamp(20px, 2.8vw, 24px); margin-top: 24px; }
+.policy h3 { font-size: clamp(18px, 2.4vw, 20px); margin-top: 18px; }
+
+/* treść – zwykły tekst */
+.policy p,
+.policy li {
+  color: #eaeaea;
+  font-weight: 400;
+}
+
+/* listy */
+.policy ul { padding-left: 20px; margin: 8px 0 16px; }
+
+/* małe elementy */
+.policy .muted { color: rgba(255,255,255,.7); font-size: 14px; }
+
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" role="banner">
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="Strona główna">
+<img src="INFI.png" alt="Logo firmy" width="150" height="auto" class="logo">
+
+      </a>
+
+      <div class="cta">
+        <a class="btn" href="index.html">Powrót</a>
+      </div>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Otwórz menu" aria-expanded="false" aria-controls="mobileNav">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path id="icon-bars" d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" />
+          <path id="icon-x" class="hidden" d="M6.2 5l12.8 12.8-1.2 1.2L5 6.2 6.2 5zm12.8 1.2L6.2 19l-1.2-1.2L17.8 5l1.2 1.2z" />
+        </svg>
+      </button>
+    </div>
+
+    <div id="mobileNav" class="mobile container" hidden>
+      <a href="#funkcje">Funkcje</a>
+      <a href="#o-nas">O nas</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+  </header>
+
+<body>
+<!-- Floating Help Button -->
+<div id="chatContainer">
+  <div id="chatBtn">💬</div>
+  <div id="chatBox">
+    <div class="chat-header">
+      Centrum Pomocy
+      <span id="closeChat">✖</span>
+    </div>
+    <div class="chat-messages">
+      <p><b>InfinityBot:</b> Witaj! W czym mogę pomóc?</p>
+    </div>
+    <div class="chat-input">
+      <input type="text" id="chatInputField" placeholder="Napisz wiadomość..." />
+      <button id="sendMsg">➤</button>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Produkty -->
+  <section class="products">
+    <div class="container">
+
+      <div class="grid">
+        
+<div class="product-card">
+
+  <h3 class="product-name"><section id="polityka" class="policy">
+  <div class="container">
+    <div class="policy-card">
+      <h1>Polityka prywatności</h1>
+      <p class="muted">Data wejścia w życie: <strong>10.03.2024</strong></p>
+
+      <h2>1. Administrator danych</h2>
+      <p>Administratorem danych osobowych jest <strong>INFINITY HAVEN</strong>, 00-001 Warszawa, poznańska 6, kontakt: <a href="mailto:support@haven.it" class="a22">support.infinity@gmail.com</a>.</p>
+
+      <h2>2. Zakres zbieranych danych</h2>
+      <p>W ramach korzystania z naszej strony możemy przetwarzać m.in.:</p>
+      <ul>
+        <p>dane identyfikacyjne (imię, nazwisko, nazwa firmy),</p>
+        <p>dane kontaktowe (adres e-mail, numer telefonu),</p>
+        <p>dane dotyczące zamówień i płatności,</p>
+        <p>adres IP, dane dot. urządzenia, pliki cookies oraz statystyki aktywności na stronie.</p>
+      </ul>
+
+      <h2>3. Cele przetwarzania danych</h2>
+      <ul>
+        <p>realizacja zamówień i świadczenie usług,</p>
+        <p>obsługa zapytań (formularz, e-mail),</p>
+        <p>działania marketingowe (np. newsletter) — jeśli wyrazisz zgodę,</p>
+        <p>zapewnienie bezpieczeństwa i ulepszanie funkcjonalności serwisu.</p>
+      </ul>
+
+      <h2>4. Podstawa prawna przetwarzania</h2>
+      <ul>
+        <p>art. 6 ust. 1 lit. b RODO — wykonanie umowy lub działania przedumowne,</p>
+        <p>art. 6 ust. 1 lit. c RODO — obowiązek prawny,</p>
+        <p>art. 6 ust. 1 lit. f RODO — prawnie uzasadniony interes administratora,</p>
+        <p>art. 6 ust. 1 lit. a RODO — zgoda (np. marketing, cookies).</p>
+      </ul>
+
+      <h2>5. Okres przechowywania danych</h2>
+      <p>Dane przechowujemy przez okres niezbędny do realizacji celów, a także zgodnie z przepisami prawa (np. księgowymi). W przypadku przetwarzania na podstawie zgody — do czasu jej cofnięcia.</p>
+
+      <h2>6. Prawa użytkownika</h2>
+      <p>Przysługują Ci prawa: dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia danych, sprzeciwu wobec przetwarzania, a także prawo wniesienia skargi do Prezesa UODO.</p>
+
+      <h2>7. Udostępnianie danych</h2>
+      <p>Dane mogą być przekazywane podmiotom wspierającym nas w realizacji usług (np. hosting, IT, operatorzy płatności, firmy kurierskie) — wyłącznie w niezbędnym zakresie i na podstawie umów powierzenia.</p>
+
+      <h2>8. Pliki cookies</h2>
+      <p>Strona korzysta z cookies w celach zapewnienia działania serwisu, analitycznych i — za zgodą — marketingowych. Ustawienia cookies możesz zmienić w przeglądarce. Szczegóły opisujemy w Polityce cookies.</p>
+
+      <h2>9. Bezpieczeństwo</h2>
+      <p>Stosujemy środki techniczne i organizacyjne adekwatne do ryzyka, aby chronić dane przed nieuprawnionym dostępem, utratą lub uszkodzeniem.</p>
+
+      <h2>10. Kontakt</h2>
+      <p>W sprawach dot. danych osobowych skontaktuj się z nami: 📧 <a href="mailto:support.infinity@gmail.com" class="a22">support.infinity@gmail.com</a>.</p>
+
+      <h2>11. Zmiany polityki prywatności</h2>
+      <p>Polityka może być aktualizowana w celu odzwierciedlenia zmian prawnych lub funkcjonalnych. Nowe brzmienie publikujemy na tej stronie z aktualną datą.</p>
+    </div>
+  </div>
+</section>
+</h3>
+  <a href="index.html" class="btn" style="margin-top:10px;">Zapoznałem się</a>
+</div>
+
+
+
+</div>
+
+      </div>
+    </div>
+  </section>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">© <span id="year"></span> HAVEN<a class="a22">.IT </a>
+        
+    <a href="polityka.html" class="btn23">Polityka prywatności</a>
+  </footer>
+
+  <script>
+    // Aktualny rok w stopce
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Prosty mobilny toggle menu z dostępnością
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const iconBars = document.getElementById('icon-bars');
+    const iconX = document.getElementById('icon-x');
+
+    menuBtn.addEventListener('click', () => {
+      const open = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', String(!open));
+      mobileNav.hidden = open; // ukryj/pokaż kontener
+      iconBars.classList.toggle('hidden');
+      iconX.classList.toggle('hidden');
+      if (!open) {
+        // Ustaw focus na pierwszym linku po otwarciu
+        const first = mobileNav.querySelector('a');
+        if (first) first.focus();
+      } else {
+        menuBtn.focus();
+      }
+    });
+
+    // BOT CHAT
+    const chatBtn = document.getElementById("chatBtn");
+const chatBox = document.getElementById("chatBox");
+const closeChat = document.getElementById("closeChat");
+const sendMsg = document.getElementById("sendMsg");
+const chatInputField = document.getElementById("chatInputField");
+const chatMessages = document.querySelector(".chat-messages");
+
+// otwieranie/zamykanie czatu klikając w kółko
+chatBtn.addEventListener("click", () => {
+  if (chatBox.style.display === "flex") {
+    chatBox.style.display = "none";
+  } else {
+    chatBox.style.display = "flex";
+  }
+});
+
+// zamknięcie z X w nagłówku
+closeChat.addEventListener("click", () => {
+  chatBox.style.display = "none";
+});
+
+// wysyłanie wiadomości
+sendMsg.addEventListener("click", sendMessage);
+chatInputField.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendMessage();
+});
+
+function sendMessage() {
+  const msg = chatInputField.value.trim();
+  if (msg === "") return;
+  
+  // dodaj wiadomość użytkownika
+  const userMsg = document.createElement("p");
+  userMsg.innerHTML = `<b>Ty:</b> ${msg}`;
+  chatMessages.appendChild(userMsg);
+
+  chatInputField.value = "";
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // prosta odpowiedź bota
+  setTimeout(() => {
+    const botMsg = document.createElement("p");
+    botMsg.innerHTML = `<b>InfinityBot:</b> Skontaktujemy sie najszybciej jak to możliwe, możesz również napisać do nas na: <a href='mailto:support@haven.it' style='color:#ffca0e'>support@haven.it</a>`;
+    chatMessages.appendChild(botMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }, 800);
+}
+
+
+    // Zamknij menu po kliknięciu linku
+    mobileNav.addEventListener('click', (e) => {
+      const t = e.target;
+      if (t.tagName === 'A') {
+        menuBtn.setAttribute('aria-expanded', 'false');
+        mobileNav.hidden = true;
+        iconBars.classList.remove('hidden');
+        iconX.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
